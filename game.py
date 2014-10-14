@@ -7,40 +7,36 @@ from team import Team
 import abc
 from _pyio import __metaclass__
 
+#Object representing a game.
 class Game(object):
 
-
-    def __init__(self, gameID, week, location, teams, scores):
+    #gameID: unique game identifier
+    #week: the week number the game is being played in // might not be necessary
+    #location:
+    #teams: list like [team1, team2] to represent teams playing.
+    def __init__(self, gameID, week, location, teams):
         self.id = gameID
         self.teams = teams
         self.location = location
         self.week = week
-        self.played = None
-        self.outcome = RealOutcome(teams, scores) if(self.played) else SimuOutcome()
         for team in teams:
             team.addGame(self)
+        self.outcome = None
+        
+    def addOutcome(self, scores):
+        self.outcome = Outcome(self.teams, scores)
 
     def toString(self):
-        print(self.id +"\t" + str(self.teams))
-        
-    def getWinner(self):
-        return(self.team[0] 
-               if (self.teams[0].getRanking < self.teams[1].getRanking) 
-               else self.team[1])
-    
+        outString = str(self.id) +"\t"
+        for teamIndex,team in enumerate(self.teams):
+            outString += team.name
+            if(self.outcome != None):
+                outString += ": " + str(self.outcome.scores[teamIndex])
+            outString += "\t"
+        print(outString)
+
 class Outcome(object):
-    __metaclass__ = abc.ABCMeta
     def __init__(self, teams, scores):
-        self.winner = None
-        self.scores = dict()
-        for index,team in enumerate(teams):
-                self.scores.update({team: scores[index]})
-    
-class RealOutcome(Outcome):
-    def __init__(self):
-        super(RealOutcome, self).__init__()
-    
-    
-class SimuOutcome(Outcome):
-    def __init__(self):
-        super(SimuOutcome, self).__init__()
+        self.winner = teams[0] if (scores[0] > scores[1]) else (teams[1] if (scores[0] < scores[1]) else None)
+        self.loser  = teams[1] if (scores[0] > scores[1]) else (teams[0] if (scores[0] < scores[1]) else None)
+        self.scores = scores

@@ -5,15 +5,25 @@ Created on Jul 12, 2014
 '''
 from season import Season
 from team import Team
+import numpy as np
+import copy
 
 SCHEDULE_FILE = "/Users/eotles/Documents/workspace/Bracketology/schedule.csv"
-CURRENT_WEEK = 0
-TEAMS = {1:Team(1, "ONE"), 2:Team(2, "Two"), 3:Team(3, "Three"), 4:Team(4, "Four")}
-WEEKS = ["1", "2", "3"]
+TEAM_FILE = "/Users/eotles/Documents/workspace/Bracketology/teams.csv"
+LAST_PLAYED_WEEK = 2
 
 
 def main():
-    Season(CURRENT_WEEK,TEAMS,SCHEDULE_FILE)
+    s = Season(TEAM_FILE,SCHEDULE_FILE, LAST_PLAYED_WEEK)
+    mc = s.makeMC(LAST_PLAYED_WEEK)
+    m = np.matrix(mc)
+    print(m)
+    n = copy.deepcopy(m)
+    for i in xrange(100):
+        print("Iteration %d" %i)
+        n = n*m
+        print(n)
+    #print(s.makeMC(LAST_PLAYED_WEEK))
     
 
 if __name__ == '__main__':
