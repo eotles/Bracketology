@@ -68,7 +68,7 @@ Houston,Houston
 Howard,Howard
 Idaho,Idaho
 Idaho State,Idaho St.
-Illinois,Illinois
+Illinois,Illinois,Illinois State
 Indiana,Indiana
 Indiana State,Indiana St.
 Iowa,Iowa
@@ -93,7 +93,7 @@ Massachusetts,Massachusetts
 McNeese State,McNeese St.
 Memphis,Memphis
 Miami (FL),Miami (FL)
-Miami (OH),Miami (OH)
+Miami (OH),Miami (OH),Miami (OH),Miami (OH),Miami (OH)
 Michigan,Michigan
 Michigan State,Michigan St.
 Middle Tennessee State,Middle Tenn.
@@ -207,3 +207,8 @@ Wofford,Wofford
 Wyoming,Wyoming
 Yale,Yale
 Youngstown State,Youngstown St.
+Jackson State
+Prairie View A&M
+Tennessee Tech
+Alabama State
+Coastal Carolina
