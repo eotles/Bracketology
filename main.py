@@ -3,18 +3,21 @@ Created on Jul 12, 2014
 
 @author: eotles
 '''
+import sys
 from season import Season
 from team import Team
 import numpy as np
 import copy
+import random
 
 SCHEDULE_FILE = "/Users/eotles/Documents/workspace/Bracketology/data/schedule_2014.csv"
 TEAM_FILE = "/Users/eotles/Documents/workspace/Bracketology/data/teams_2014.csv"
-LAST_PLAYED_WEEK = 8
+CONFERENCES_FILE = "/Users/eotles/Documents/workspace/Bracketology/data/conferences_2014.csv"
+LAST_PLAYED_WEEK = 9
 
 
-def main():
-    s = Season(TEAM_FILE,SCHEDULE_FILE, LAST_PLAYED_WEEK)
+def main(reps):
+    s = Season(TEAM_FILE,SCHEDULE_FILE, CONFERENCES_FILE, LAST_PLAYED_WEEK)
     #s2 = copy.deepcopy(s)
     #mc = s.makeMC(LAST_PLAYED_WEEK)
     #m = np.matrix(mc)
@@ -41,8 +44,12 @@ def main():
     #    for setup in [[2, 0.04, 0.3], [2, 0.01, 0.35], [2, 0, 0.29], [2, 0.38, 0.24]]:
     #        print("%d -> %d, %s, %f" %(t,t+1, setup, s.training([setup[0]], [setup[1]], [setup[2]], t, t+1)))
     
-    s.runSimulation(10000, 2, 0.04, 0.3)
+    random.seed(42)
+    for i in range(10):
+        seed = random.randint(0,99999)
+        print("---------------------------%d------------------------------------" %i)
+        s.runSimulation(seed,reps, 6, 0.04, 0.3)
     
 
 if __name__ == '__main__':
-    main()
+    main(int(sys.argv[1]))

@@ -12,8 +12,8 @@ def main():
     scoresFP = "/Users/eotles/Documents/workspace/Bracketology/data/scores_2014.csv"
     namesFP = "/Users/eotles/Documents/workspace/Bracketology/data/names.txt"
     
-    scheduleFP = "/Users/eotles/Documents/workspace/Bracketology/schedule_2014.csv"
-    teamsFP = "/Users/eotles/Documents/workspace/Bracketology/teams_2014.csv"
+    scheduleFP = "/Users/eotles/Documents/workspace/Bracketology/data/schedule_2014.csv"
+    teamsFP = "/Users/eotles/Documents/workspace/Bracketology/data/teams_2014.csv"
     
 
     teamNameDict = dict()
@@ -68,7 +68,7 @@ def main():
             g2Loc = gameDict.get(g2)
             
             if(g1Loc != None):
-                if(g1Loc == "Home"):
+                if(g1Loc == "Home"): 
                     location = t1 
                     lID = tNo1
                 elif(g1Loc == "Away"):
@@ -94,6 +94,7 @@ def main():
             #if(gameDict.get(g) == "Home") else line[8] if(gameDict.get(g2) == "Home") else "Neutral"
             print("%s,%s,%s,%s,%s,%s,%s,%s" %(gNo, wNo, d, t1, s1, t2, s2, location))
             schedule.write("%s,%s,%s,%s,%s,%s,%s\n" %(gNo, wNo, lID, tNo1, tNo2, s1, s2))
+    schedule.close()
     
 def date(badString):
     months = {"Aug" : "8", "Sep":"9", "Oct":"10", "Nov":"11", "Dec":"12"}

@@ -1,0 +1,215 @@
+header,,,
+0,Abilene Christian,,
+1,Air Force,Mountain West,Mountain
+2,Akron,Mid American,East
+3,Alabama,SEC,West
+4,Alabama A&M,,
+5,Alabama-Birmingham,Conference USA,East
+6,Alcorn State,,
+7,Appalachian State,Sun Belt,
+8,Arizona,Pac12,South
+9,Arizona State,Pac12,South
+10,Arkansas,SEC,West
+11,Arkansas State,Sun Belt,
+12,Arkansas-Pine Bluff,,
+13,Army,FBS Independents,
+14,Auburn,SEC,West
+15,Austin Peay,,
+16,Ball State,Mid American,West
+17,Baylor,Big12,
+18,Bethune-Cookman,,
+19,Boise State,Mountain West,Mountain
+20,Boston College,Atlantic Coast,Atlantic
+21,Bowling Green State,Mid American,East
+22,Brigham Young,FBS Independents,
+23,Buffalo,Mid American,East
+24,Cal Poly,,
+25,California,Pac12,North
+26,California-Davis,,
+27,Campbell,,
+28,Central Arkansas,,
+29,Central Florida,American Athletic,
+30,Central Michigan,Mid American,West
+31,Charleston Southern,,
+32,Chattanooga,,
+33,Cincinnati,American Athletic,
+34,Citadel,,
+35,Clemson,Atlantic Coast,Atlantic
+36,Colgate,,
+37,Colorado,Pac12,South
+38,Colorado State,Mountain West,Mountain
+39,Connecticut,American Athletic,
+40,Delaware,,
+41,Delaware State,,
+42,Duke,Atlantic Coast,Coastal
+43,Duquesne,,
+44,East Carolina,American Athletic,
+45,Eastern Illinois,,
+46,Eastern Kentucky,,
+47,Eastern Michigan,Mid American,West
+48,Eastern Washington,,
+49,Elon,,
+50,Florida,SEC,East
+51,Florida A&M,,
+52,Florida Atlantic,Conference USA,East
+53,Florida International,Conference USA,East
+54,Florida State,Atlantic Coast,Atlantic
+55,Fordham,,
+56,Fresno State,Mountain West,West
+57,Furman,,
+58,Gardner-Webb,,
+59,Georgia,SEC,East
+60,Georgia Southern,Sun Belt,
+61,Georgia State,Sun Belt,
+62,Georgia Tech,Atlantic Coast,Coastal
+63,Grambling State,,
+64,Hampton,,
+65,Hawaii,Mountain West,West
+66,Houston,American Athletic,
+67,Howard,,
+68,Idaho,Sun Belt,
+69,Idaho State,,
+70,Illinois,B1G,West
+71,Indiana,B1G,East
+72,Indiana State,,
+73,Iowa,B1G,West
+74,Iowa State,Big12,
+75,Jacksonville State,,
+76,James Madison,,
+77,Kansas,Big12,
+78,Kansas State,Big12,
+79,Kent State,Mid American,East
+80,Kentucky,SEC,East
+81,Lamar,,
+82,Liberty,,
+83,Louisiana State,SEC,West
+84,Louisiana Tech,Conference USA,West
+85,Louisiana-Lafayette,Sun Belt,
+86,Louisiana-Monroe,Sun Belt,
+87,Louisville,Atlantic Coast,Atlantic
+88,Maine,,
+89,Marshall,Conference USA,East
+90,Maryland,B1G,East
+91,Massachusetts,Mid American,East
+92,McNeese State,,
+93,Memphis,American Athletic,
+94,Miami (FL),Atlantic Coast,Coastal
+95,Miami (OH),Mid American,East
+96,Michigan,B1G,East
+97,Michigan State,B1G,East
+98,Middle Tennessee State,Conference USA,East
+99,Minnesota,B1G,West
+100,Mississippi,SEC,West
+101,Mississippi State,SEC,West
+102,Missouri,SEC,East
+103,Missouri State,,
+104,Montana,,
+105,Montana State,,
+106,Morgan State,,
+107,Murray State,,
+108,Navy,FBS Independents,
+109,Nebraska,B1G,West
+110,Nevada,Mountain West,West
+111,Nevada-Las Vegas,Mountain West,West
+112,New Hampshire,,
+113,New Mexico,Mountain West,Mountain
+114,New Mexico State,Sun Belt,
+115,Nicholls State,,
+116,Norfolk State,,
+117,North Carolina,Atlantic Coast,Coastal
+118,North Carolina Central,,
+119,North Carolina State,Atlantic Coast,Atlantic
+120,North Dakota,,
+121,North Dakota State,,
+122,North Texas,Conference USA,West
+123,Northern Arizona,,
+124,Northern Colorado,,
+125,Northern Illinois,Mid American,West
+126,Northern Iowa,,
+127,Northwestern,B1G,West
+128,Northwestern State,,
+129,Notre Dame,FBS Independents,
+130,Ohio,B1G,East
+131,Ohio State,Mid American,East
+132,Oklahoma,Big12,
+133,Oklahoma State,Big12,
+134,Old Dominion,Conference USA,East
+135,Oregon,Pac12,North
+136,Oregon State,Pac12,North
+137,Penn State,B1G,East
+138,Pittsburgh,Atlantic Coast,Coastal
+139,Portland State,,
+140,Presbyterian,,
+141,Purdue,B1G,West
+142,Rhode Island,,
+143,Rice,Conference USA,West
+144,Richmond,,
+145,Rutgers,B1G,East
+146,Sacramento State,,
+147,Sam Houston State,,
+148,Samford,,
+149,San Diego State,Mountain West,West
+150,San Jose State,Mountain West,West
+151,Savannah State,,
+152,South Alabama,Sun Belt,
+153,South Carolina,SEC,East
+154,South Carolina State,,
+155,South Dakota,,
+156,South Dakota State,,
+157,South Florida,American Athletic,
+158,Southeast Missouri State,,
+159,Southeastern Louisiana,,
+160,Southern,,
+161,Southern California,Pac12,South
+162,Southern Illinois,,
+163,Southern Methodist,American Athletic,
+164,Southern Mississippi,Conference USA,West
+165,Southern Utah,,
+166,Stanford,Pac12,North
+167,Stephen F. Austin,,
+168,Stony Brook,,
+169,Syracuse,Atlantic Coast,Atlantic
+170,Temple,American Athletic,
+171,Tennessee,SEC,East
+172,Tennessee-Martin,,
+173,Texas,Big12,
+174,Texas A&M,SEC,West
+175,Texas Christian,Big12,
+176,Texas State,Sun Belt,
+177,Texas Tech,Big12,
+178,Texas-El Paso,Conference USA,West
+179,Texas-San Antonio,Conference USA,West
+180,Toledo,Mid American,West
+181,Towson,,
+182,Troy,Sun Belt,
+183,Tulane,American Athletic,
+184,Tulsa,American Athletic,
+185,UCLA,Pac12,South
+186,Utah,Pac12,South
+187,Utah State,Mountain West,Mountain
+188,Vanderbilt,SEC,East
+189,Villanova,,
+190,Virginia,Atlantic Coast,Coastal
+191,Virginia Military Institute,,
+192,Virginia Tech,Atlantic Coast,Coastal
+193,Wagner,,
+194,Wake Forest,Atlantic Coast,Atlantic
+195,Washington,Pac12,North
+196,Washington State,Pac12,North
+197,Weber State,,
+198,West Virginia,Big12,
+199,Western Carolina,,
+200,Western Illinois,,
+201,Western Kentucky,Conference USA,East
+202,Western Michigan,Mid American,West
+203,William & Mary,,
+204,Wisconsin,B1G,West
+205,Wofford,,
+206,Wyoming,Mountain West,Mountain
+207,Yale,,
+208,Youngstown State,,
+209,Jackson State,,
+210,Prairie View A&M,,
+211,Tennessee Tech,,
+212,Alabama State,,
+213,Coastal Carolina,,

@@ -11,17 +11,28 @@ import numpy as np
 import random as rand
 import copy
 
+
+
 class Season(object):
     #initialize season
-    def __init__(self, teamFile, scheduleFile, lastPlayedWeek):
+    def __init__(self, teamFile, scheduleFile, conferencesFile, lastPlayedWeek):
         self.teams = self.loadTeams(teamFile)
         self.lastPlayedWeek = lastPlayedWeek
         self.schedule = dict()
         self.loadSchedule(scheduleFile, lastPlayedWeek)
-        #for week,gameList in self.schedule.iteritems():
-        #    print("Week #%d" %week)
-        #    for Game in gameList:
-        #        Game.toString()
+        self.loadConferences(conferencesFile)
+        self.BLANKMC = [[0 for _ in self.teams] for _ in self.teams]
+        self.BLANKGAMERESULTS = [[0 for _ in self.teams] for _ in self.teams]
+        self.BLANKCOUNTS = dict()
+        for teamID in self.teams:
+            self.BLANKCOUNTS.update({teamID: 0})
+        self.gameResultsDict = dict()
+        self.gameCountDict = dict()
+        self.gameResultsDict.update({0: self.BLANKMC})
+        self.gameCountDict.update({0: [0 for _ in self.teams]})
+        for week in xrange(1,lastPlayedWeek+1):
+            self.makeGR(week)
+
     
     #open team file.  Make and return team dictionary
     #teamID -> team for all teams
@@ -62,9 +73,59 @@ class Season(object):
             self.schedule.update({gameWeek: self.schedule.get(gameWeek)+[(newGame)]})
             #gameID += 1
         schedule.close()
+        
+    def loadConferences(self, conferencesFile):
+        confDict = dict()
+        confDiv = dict()
+        conferences = open(conferencesFile)
+        next(conferences)
+        for row in conferences:
+            conferenceData = row.strip().split(",")
+            #print(conferenceData)
+            if(conferenceData[2] != ''):
+                teamConf = conferenceData[2]
+                if(conferenceData[3] != ''):
+                    division = conferenceData[3]
+                    divList = confDiv.get(teamConf) if(confDiv.has_key(teamConf)) else set()
+                    divList.add(division)
+                    confDiv.update({teamConf: divList})
+                    teamConf += " - " + conferenceData[3]
+                #print(teamConf)
+                teamList = confDict.get(teamConf) if(confDict.has_key(teamConf)) else list()
+                teamList.append(self.teams.get(int(conferenceData[0])))
+                confDict.update({teamConf: teamList})
 
+        self.confDict = confDict
+        self.confDiv = confDiv
+                
+
+    def makeGR(self, lpw):
+        gr = list(self.gameResultsDict.get(lpw-1))
+        gameCount = list(self.gameCountDict.get(lpw-1))
+        for game in self.schedule.get(lpw):
+            winner = game.outcome.winner
+            loser = game.outcome.loser
+            #print("%s,%s,%s" %(game.id, winner, loser))
+            if(winner != None):
+                gr[loser.id][winner.id] += 1
+                gr[winner.id][winner.id] += 1
+                gameCount[loser.id] += 1
+                gameCount[winner.id] += 1
+        
+        self.gameResultsDict.update({lpw: gr})
+        self.gameCountDict.update({lpw: gameCount})
+        return(gr)
+    
+    
     def makeMC(self, lpw):
-        mc = [[0 for _ in self.teams] for _ in self.teams]
+        '''
+        #mc = [[0 for _ in self.teams] for _ in self.teams]
+        #mc = list(self.BLANKMC)
+        #gameCount = copy.copy(self.BLANKCOUNTS)
+        mc = list(self.gameResultsDict.get(lpw-1))
+        #print(mc)
+        gameCount = list(self.gameCountDict.get(lpw-1))
+        
         for week,gameList in self.schedule.iteritems():
             if(week <= lpw):
                 for game in gameList:
@@ -73,14 +134,33 @@ class Season(object):
                     #print("%s,%s,%s" %(game.id, winner, loser))
                     if(winner != None):
                         mc[loser.id][winner.id] += 1
-                        #mc[winner.id][winner.id] += 1
+                        mc[winner.id][winner.id] += 1
+                        gameCount[loser.id] += 1
+                        gameCount[winner.id] += 1
+
+        for game in self.schedule.get(lpw):
+            winner = game.outcome.winner
+            loser = game.outcome.loser
+            #print("%s,%s,%s" %(game.id, winner, loser))
+            if(winner != None):
+                mc[loser.id][winner.id] += 1
+                mc[winner.id][winner.id] += 1
+                gameCount[loser.id] += 1
+                gameCount[winner.id] += 1
+        
+        self.gameResultsDict.update({lpw: mc})
+        self.gameCountDict.update({lpw: gameCount})
+        '''
+        mc = self.makeGR(lpw)
+        gameCount = self.gameCountDict.get(lpw)
         for rowIndex,row in enumerate(mc):
-            rowSum = sum(row)
+            rowSum = gameCount[rowIndex]
             if(rowSum != 0):
-                mc[rowIndex] = [float(val)/rowSum for val in row]
+                nonZeroEntry = 1.0/rowSum
+                mc[rowIndex] = [0 if(val==0) else val*nonZeroEntry for val in row]
         return(mc)
 
-    dict().iteritems()
+    #dict().iteritems()
 
     def training(self, prItRange, hwRange, mwpRange, fromWeek, answerWeek):
         minErrorSetup = ""
@@ -113,135 +193,96 @@ class Season(object):
         print(minErrorSetup)
         return(minError)
         
-    '''
-    def training(self, answer):
-        results = []
-        #rand.seed(42)
-        replications = 100
         
-        totalOrderingScore = 0
-        mOS = 9999999999
-        mO = list()
-        totalContainingScore = 0
-        mCS = 99999999999
-        mC = list()
-        totalTop10Score = 0
-        mTS = 99999999999
-        mT = list()
-        totalTop4Score = 0
-        mT4S = 99999999999
-        mT4 = list()
-        for prIt in range(0,10,2):
-            for homeWeight in [0, 0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.5]:
-                for minWinPer in [0, 0.01, 0.05, 0.1, 0.15, 0.20]:
-                    setup = [prIt, homeWeight, minWinPer]
-                    print(setup)
-                    totalOrderingScore = 0
-                    totalContainingScore = 0
-                    totalTop10Score = 0
-                    totalTop4Score = 0
-                    rand.seed(42)
-                    for repId in xrange(replications):
-                        #print("Replication: %d" %(repId))
-                        repResult = self.simulateSeason(prIt, homeWeight, minWinPer)
-                        #print(repResult)
-                        results.append(repResult)
-                        
-                        #orderingscore = 0
-                        #for index,team in enumerate(repResult):
-                        #    if(team != answer[index]):
-                        #        orderingscore += 25-index
-                        
-                        #containingscore = 0
-                        #for team in repResult:
-                        #    if(team not in answer):
-                        #        containingscore += 1
-                        
-                        #top10score = 0
-                        #for team in repResult[0:10]:
-                        #    if(team not in answer[0:10]):
-                        #        top10score += 1
-                        
-                        top4Score = 0
-                        print repResult[0:4]
-                        print answer[0:4]
-                        for team in repResult[0:4]:
-                            if(team not in answer[0:4]):
-                                top4Score = 1
-                                break
-                        
-                        
-                                
-                        #print("%d %d %d" %(orderingscore, containingscore, top10score))
-                        #totalOrderingScore += orderingscore
-                        #totalContainingScore += containingscore
-                        #totalTop10Score += top10score
-                        totalTop4Score += top4Score
-                        if(totalOrderingScore < mOS):
-                            mOS = totalOrderingScore
-                            mO = setup
-                        if(totalContainingScore < mCS):
-                            mCS = totalContainingScore
-                            mC = setup
-                        if(totalTop10Score < mTS):
-                            mTS = totalTop10Score
-                            mT = setup
-                        if(totalTop4Score < mTS):
-                            mT4S = totalTop4Score
-                            mT4 = setup
-                    print("%d %d %d %d" %(totalOrderingScore, totalContainingScore, totalTop10Score, totalTop4Score))
-        print mOS,
-        print(mO)
-        print mC,
-        print(mC)
-        print mT,
-        print(mT)
-        print mT4,
-        print(mT4)
-    '''
-
-    def runSimulation(self, replications, prIt, homeWeight, minWinPer):
+    def runSimulation(self, seed, replications, prIt, homeWeight, minWinPer):
         results = []
-        rand.seed(42)
+        countIn = dict()
+        countMiss = dict()
+        for teamId,team in self.teams.iteritems():
+            countIn.update({team: 0})
+            countMiss.update({team: 0})
+        #rand.seed(42)
+        rand.seed(seed)
         for repId in xrange(replications):
-            print("Replication: %d" %(repId))
+            #print("Rep: %d" %repId)
             repResult = self.simulateSeason(prIt, homeWeight, minWinPer)
-            print(repResult)
+            #print(repResult)
             results.append(repResult)
-        print(results)
-        counts = [dict() for _ in repResult]
-        for row in results:
-            for colIndex,val in enumerate(row):
-                valCount = 1
-                if(counts[colIndex].has_key(val)):
-                    valCount = counts[colIndex].get(val) + 1
-                counts[colIndex].update({val: valCount})
-        print(counts)
-        x = list()
-        for teamCount in counts:
-            minCount = 0
-            minCountTeam = 999
-            for team,count in teamCount.iteritems():
-                if((count > minCount) and not(team in x)):
-                    minCount = count
-                    minCountTeam = team
-            x.append(minCountTeam)
-        print(x)
-        return(x)
+            for teamId in repResult[:4]:
+                team = self.teams.get(teamId)
+                countIn.update({team: countIn.get(team)+1})
+            countMiss.update({team: countMiss.get(team)+1})
+               
+        for team,count in countIn.iteritems():
+            print("%s, %d, %d" %(team.name, count, countMiss.get(team)))
+        
+        
+        #print(results)
+        #self.countTeamsInTop(results)
+    
+    def countTeamsInTop(self, results):
+        count = dict()
+        for teamId,team in self.teams.iteritems():
+            count.update({team: 0})
+        for row in results[:4]:
+            for teamId in row:
+                team = self.teams.get(teamId)
+                count.update({team: count.get(team)+1})
+        
+        for team,count in count.iteritems():
+            print("%s: %d" %(team.name, count))
+            
+        
     
     def simulateToWeek(self, prIt, homeWeight, minWinPer, fromWeek, toWeek):
         currSimWeek = fromWeek
         for currSimWeek in range(fromWeek, toWeek):
+            #print("sim week: %s" %(currSimWeek))
             self.simulateNextWeek(currSimWeek, prIt, homeWeight, minWinPer)
+        
+    def championshipGames(self, prIt, champWeek):
+        ratings = self.getRatings(prIt, champWeek-1)
+        #print(self.confDict)
+        gameID = 99999
+        gameLocation = -999
+        championshipGames = list()
+        for conference, divisions in self.confDiv.iteritems():
+            #print(conference)
+            #print(divisions)
+            gameTeams = list()
+            for div in divisions:
+                confDiv = conference + " - " + div
+                #print(confDiv)
+                bestRating = -99
+                bestTeam = None
+                for team in self.confDict.get(confDiv):
+                    teamRating = ratings[team.id]
+                    if(teamRating > bestRating):
+                        bestRating = teamRating
+                        bestTeam = team
+                gameTeams.append(bestTeam)
+            #print(gameTeams)
+            gameID += 1
+            newGame = Game(gameID, champWeek, gameLocation, gameTeams)
+            championshipGames.append(newGame)
+            
+        return(championshipGames)
     
     def simulateSeason(self, prIt, homeWeight, minWinPer):
-        numTop = 25
+        numTop = 5
         teamRating = collections.namedtuple('teamRating', ['teamID', 'rating'])
         rankings = [teamRating(999, -1) for _ in range(0, numTop)]
 
         self.simulateToWeek(prIt, homeWeight, minWinPer, self.lastPlayedWeek, 16)
+        
+        #make champ games
+        champWeek = 17
+        self.schedule.update({champWeek: self.championshipGames(prIt, champWeek)})
+        
+        #play champ games
+        self.simulateNextWeek(16, prIt, homeWeight, minWinPer)
        
-        ratings = self.getRatings(prIt, 16)
+        ratings = self.getRatings(prIt, champWeek)
         for teamID, rating in enumerate(ratings):
             for i, ranking in enumerate(rankings):
                 if(rating > ranking.rating):
@@ -250,16 +291,19 @@ class Season(object):
                     rankings[i] = teamRating(teamID, rating)
                     break
         rankedList = [team.teamID for team in rankings]
+        
         return(rankedList)
     
     def getRatings(self, prIt, lpw):
         #pageRank
         mc = self.makeMC(lpw)
         prMatrix = np.matrix(mc)
-        ratingMatrix = copy.deepcopy(prMatrix)
+        #ratingMatrix = copy.deepcopy(prMatrix)
         for _ in xrange(prIt-1):
-            ratingMatrix = ratingMatrix*prMatrix
-        teamRatings = [rating for rating in np.sum(ratingMatrix, axis=0, keepdims=False).tolist()[0]]
+            prMatrix *= prMatrix
+            #ratingMatrix = ratingMatrix*prMatrix
+        teamRatings = [rating for rating in np.sum(prMatrix, axis=0, keepdims=False).tolist()[0]]
+        #teamRatings = [rating for rating in np.sum(ratingMatrix, axis=0, keepdims=False).tolist()[0]]
         return(teamRatings)
     
     def simulateNextWeek(self, lpw, prIt, homeWeight, minWinPer):
@@ -283,6 +327,8 @@ class Season(object):
                 scores = [0,99]
                 winner = game.teams[1]
                 game.addOutcome(scores)
-            #print("\t%s\t%s\t%f  %f  %f\t%s"   %(game.teams[0].id, game.teams[1].id, ratings[0], ratings[1], pT0Win, winner.id))
+            
+            #if(game.teams[0].id  == 94 or game.teams[1].id == 94):
+            #    print("\t%s\t%s\t%f  %f  %f\t%s"   %(game.teams[0].name, game.teams[1].name, ratings[0], ratings[1], pT0Win, winner.id))
 
         
