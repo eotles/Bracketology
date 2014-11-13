@@ -9,7 +9,6 @@ import collections
 import math
 import numpy as np
 import random as rand
-import copy
 
 
 
@@ -26,12 +25,12 @@ class Season(object):
         self.BLANKCOUNTS = dict()
         for teamID in self.teams:
             self.BLANKCOUNTS.update({teamID: 0})
-        self.gameResultsDict = dict()
-        self.gameCountDict = dict()
-        self.gameResultsDict.update({0: self.BLANKMC})
-        self.gameCountDict.update({0: [0 for _ in self.teams]})
-        for week in xrange(1,lastPlayedWeek+1):
-            self.makeGR(week)
+        #self.gameResultsDict = dict()
+        #self.gameCountDict = dict()
+        #self.gameResultsDict.update({0: self.BLANKMC})
+        #self.gameCountDict.update({0: [0 for _ in self.teams]})
+        #for week in xrange(1,lastPlayedWeek+1):
+        #    self.makeGR(week)
 
     
     #open team file.  Make and return team dictionary
@@ -97,6 +96,9 @@ class Season(object):
 
         self.confDict = confDict
         self.confDiv = confDiv
+        
+        #print(confDict)
+        #print(confDiv)
                 
 
     def makeGR(self, lpw):
@@ -151,6 +153,8 @@ class Season(object):
         self.gameResultsDict.update({lpw: mc})
         self.gameCountDict.update({lpw: gameCount})
         '''
+
+        '''
         mc = self.makeGR(lpw)
         gameCount = self.gameCountDict.get(lpw)
         for rowIndex,row in enumerate(mc):
@@ -158,6 +162,25 @@ class Season(object):
             if(rowSum != 0):
                 nonZeroEntry = 1.0/rowSum
                 mc[rowIndex] = [0 if(val==0) else val*nonZeroEntry for val in row]
+        '''
+        mc = [[0 for _ in self.teams] for _ in self.teams]
+        for week, gameList in self.schedule.iteritems():
+            if(week <= lpw):
+                for game in gameList:
+                    winner = game.outcome.winner
+                    loser = game.outcome.loser
+                    #print("%s,%s,%s" %(game.id, winner, loser))
+                    if(winner != None):
+                        mc[loser.id][winner.id] += 1
+                        #mc[winner.id][winner.id] += 1
+        
+        for rowIndex, row in enumerate(mc):
+            rowSum = sum(row)
+            if(rowSum != 0):
+                nonZero = float(1)/rowSum
+                mc[rowIndex] = [0 if(x==0) else nonZero for x in row]
+            
+
         return(mc)
 
     #dict().iteritems()
@@ -198,10 +221,11 @@ class Season(object):
         results = []
         countIn = dict()
         countMiss = dict()
+        confIn = dict()
         for teamId,team in self.teams.iteritems():
             countIn.update({team: 0})
             countMiss.update({team: 0})
-        #rand.seed(42)
+
         rand.seed(seed)
         for repId in xrange(replications):
             #print("Rep: %d" %repId)
@@ -211,10 +235,17 @@ class Season(object):
             for teamId in repResult[:4]:
                 team = self.teams.get(teamId)
                 countIn.update({team: countIn.get(team)+1})
+                #for 
+            #team = self.teams.get(repResult[4])
             countMiss.update({team: countMiss.get(team)+1})
                
         for team,count in countIn.iteritems():
             print("%s, %d, %d" %(team.name, count, countMiss.get(team)))
+        
+        print("\n\n")
+        
+        for team,count in countIn.iteritems():
+            print("%s, %f, %f" %(team.name, float(count)/replications, float(countMiss.get(team))/replications))
         
         
         #print(results)
@@ -291,7 +322,7 @@ class Season(object):
                     rankings[i] = teamRating(teamID, rating)
                     break
         rankedList = [team.teamID for team in rankings]
-        
+        #print(rankedList)
         return(rankedList)
     
     def getRatings(self, prIt, lpw):
@@ -328,7 +359,8 @@ class Season(object):
                 winner = game.teams[1]
                 game.addOutcome(scores)
             
-            #if(game.teams[0].id  == 94 or game.teams[1].id == 94):
+            #if(game.teams[0].id  == 55 or game.teams[1].id == 55):
+            #    print(lpw)
             #    print("\t%s\t%s\t%f  %f  %f\t%s"   %(game.teams[0].name, game.teams[1].name, ratings[0], ratings[1], pT0Win, winner.id))
 
         

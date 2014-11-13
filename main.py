@@ -48,7 +48,7 @@ def main(reps):
     for i in range(10):
         seed = random.randint(0,99999)
         print("---------------------------%d------------------------------------" %i)
-        s.runSimulation(seed,reps, 6, 0.04, 0.3)
+        s.runSimulation(seed,reps, 9, 0.04, 0.3)
     
 
 if __name__ == '__main__':
